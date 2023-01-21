@@ -26,9 +26,9 @@ export const useAuthStore = () => {
 
       dispatch(onLogin({ name: data.name, uid: data.uid }));
     } catch (error) {
-      dispatch(onLogut('Incorrect credentials.'));
+      dispatch(onLogut(error.response.data?.msg || '--'));
       setTimeout(() => {
-        clearErrorMessage();
+        dispatch(clearErrorMessage());
       }, 10);
     }
   };

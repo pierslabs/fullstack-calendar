@@ -26,7 +26,7 @@ export const authSlice = createSlice({
     },
 
     clearErrorMessage: (state) => {
-      state.errorMessage = '';
+      state.errorMessage = undefined;
     },
   },
 });
