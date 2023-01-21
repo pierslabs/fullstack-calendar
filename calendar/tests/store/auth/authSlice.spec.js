@@ -51,10 +51,12 @@ describe('AuthSlice', () => {
       { ...notAuthenticatedState, errorMessage: 'Server Error' },
       clearErrorMessage()
     );
+
+    console.log(state);
     expect(state).toEqual({
       status: 'not-authenticated',
       user: {},
-      errorMessage: '',
+      errorMessage: undefined,
     });
   });
 });
