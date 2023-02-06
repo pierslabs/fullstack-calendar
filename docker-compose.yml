@@ -1,0 +1,65 @@
+version: '3.8'
+services:
+  server-calendar:
+    build:
+      context: ./calendar-server
+      dockerfile: Dockerfile
+    image: server-calendar
+    container_name: server-calendar
+ 
+    volumes:
+      - /app/node_modules
+      - ./calendar-server/:/app
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongo-calendar
+    env_file: ./calendar-server/.env
+    environment:
+      - NODE_ENV=development
+    networks:
+      - calendar-network
+
+  mongo-calendar:
+    image: mongo
+    volumes:
+      -  mongo-calendar-data-volume:/data/db
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    restart: on-failure
+
+    networks:
+      - calendar-network
+
+  client-calendar:
+    build:
+      context: ./calendar
+      dockerfile: Dockerfile
+    image: myapp-client-calendar
+    container_name: myapp-react-client-calendar
+    volumes:
+      - /app/node_modules
+      - ./calendar/:/app
+    depends_on:
+      - server-calendar
+    ports:
+      - "3000:5173"
+    networks:
+      - calendar-network
+    stdin_open: true
+    tty: true
+
+
+
+networks:
+    calendar-network:
+        driver: bridge
+
+volumes:
+    mongo-calendar-data-volume:
+    node_modules:
+    calendar-root:
+      driver: local
